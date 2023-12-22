@@ -10,9 +10,7 @@ public class ProductsController : ControllerBase
 {
     private readonly List<Product> _products = new List<Product>();
 
-    /// <summary>
     /// Retrieves all products.
-    /// </summary>
     [HttpGet]
     public IActionResult Get()
     {
@@ -27,9 +25,7 @@ public class ProductsController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Retrieves a specific product by its ID.
-    /// </summary>
     /// <param name="id">The ID of the product to retrieve.</param>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
@@ -50,9 +46,7 @@ public class ProductsController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Adds a new product.
-    /// </summary>
     /// <param name="product">The product to add.</param>
     [HttpPost]
     public IActionResult Post([FromBody] Product product)
@@ -72,9 +66,7 @@ public class ProductsController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Updates a specific product by its ID.
-    /// </summary>
     /// <param name="id">The ID of the product to update.</param>
     /// <param name="product">The updated product data.</param>
     [HttpPut("{id}")]
@@ -101,9 +93,7 @@ public class ProductsController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Deletes a specific product by its ID.
-    /// </summary>
     /// <param name="id">The ID of the product to delete.</param>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
@@ -125,9 +115,7 @@ public class ProductsController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Applies partial updates to a specific product by its ID using JSON Patch.
-    /// </summary>
     /// <param name="id">The ID of the product to patch.</param>
     /// <param name="patchDocument">The JSON Patch document with partial updates.</param>
     [HttpPatch("{id}")]
