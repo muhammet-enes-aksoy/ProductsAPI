@@ -1,12 +1,24 @@
 using System.ComponentModel.DataAnnotations;
 
+/// <summary>
+/// Represents a product entity in the system.
+/// </summary>
 public class Product
 {
+    /// <summary>
+    /// Gets or sets the unique identifier for the product.
+    /// </summary>
     public int Id { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets the name of the product.
+    /// </summary>
     [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets the price of the product.
+    /// </summary>
     [Required(ErrorMessage = "Price is required")]
     public decimal Price { get; set; }
 }

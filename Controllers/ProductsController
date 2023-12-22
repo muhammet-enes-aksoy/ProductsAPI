@@ -10,12 +10,15 @@ public class ProductsController : ControllerBase
 {
     private readonly List<Product> _products = new List<Product>();
 
+    /// <summary>
+    /// Retrieves all products.
+    /// </summary>
     [HttpGet]
     public IActionResult Get()
     {
         try
         {
-            // Tüm ürünleri getir
+            // Retrieve all products
             return Ok(_products);
         }
         catch (Exception ex)
@@ -24,16 +27,20 @@ public class ProductsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieves a specific product by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the product to retrieve.</param>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
         try
         {
-            // Belirli bir ürünü getir
+            // Retrieve a specific product
             var product = _products.FirstOrDefault(p => p.Id == id);
 
             if (product == null)
-                return NotFound(new { ErrorMessage = "Ürün bulunamadı." });
+                return NotFound(new { ErrorMessage = "Product not found." });
 
             return Ok(product);
         }
@@ -43,12 +50,16 @@ public class ProductsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Adds a new product.
+    /// </summary>
+    /// <param name="product">The product to add.</param>
     [HttpPost]
     public IActionResult Post([FromBody] Product product)
     {
         try
         {
-            // Yeni bir ürün ekle
+            // Add a new product
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -61,18 +72,23 @@ public class ProductsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Updates a specific product by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the product to update.</param>
+    /// <param name="product">The updated product data.</param>
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] Product product)
     {
         try
         {
-            // Belirli bir ürünü güncelle
+            // Update a specific product
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var existingProduct = _products.FirstOrDefault(p => p.Id == id);
             if (existingProduct == null)
-                return NotFound(new { ErrorMessage = "Ürün bulunamadı." });
+                return NotFound(new { ErrorMessage = "Product not found." });
 
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
@@ -85,16 +101,20 @@ public class ProductsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deletes a specific product by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the product to delete.</param>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         try
         {
-            // Belirli bir ürünü sil
+            // Delete a specific product
             var product = _products.FirstOrDefault(p => p.Id == id);
 
             if (product == null)
-                return NotFound(new { ErrorMessage = "Ürün bulunamadı." });
+                return NotFound(new { ErrorMessage = "Product not found." });
 
             _products.Remove(product);
             return NoContent();
@@ -105,16 +125,21 @@ public class ProductsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Applies partial updates to a specific product by its ID using JSON Patch.
+    /// </summary>
+    /// <param name="id">The ID of the product to patch.</param>
+    /// <param name="patchDocument">The JSON Patch document with partial updates.</param>
     [HttpPatch("{id}")]
     public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
     {
         try
         {
-            // Belirli bir ürünü yamala (patch)
+            // Apply partial updates to a specific product using JSON Patch
             var product = _products.FirstOrDefault(p => p.Id == id);
 
             if (product == null)
-                return NotFound(new { ErrorMessage = "Ürün bulunamadı." });
+                return NotFound(new { ErrorMessage = "Product not found." });
 
             patchDocument.ApplyTo(product, ModelState);
 

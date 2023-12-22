@@ -1,34 +1,68 @@
-namespace ProductsAPI;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 
-public class Startup
+namespace ProductsAPI
 {
-    public IConfiguration Configuration;
-
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-        Configuration = configuration;
-    }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddControllers();
-        
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-    }
-    
-    public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
-    {
-        if (env.IsDevelopment())
+        public Startup(IConfiguration configuration)
         {
-            app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            Configuration = configuration;
         }
 
-        app.UseHttpsRedirection();
-        app.UseRouting();
-        app.UseAuthorization();
-        app.UseEndpoints(x => { x.MapControllers(); });
+        public IConfiguration Configuration { get; }
+
+        // Configures the services used by the application.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+
+            // Add Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "PRODUCT API",
+                    Version = "v1",
+                    Description = "Description of your API"
+                });
+
+                // This section adds all assemblies in the project to Swagger by scanning them
+            });
+        }
+
+        // Configures the application's request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+                // Use Swagger only in development mode
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PRODUCT API"));
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
 }
